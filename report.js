@@ -1,7 +1,9 @@
 function printReport(pages) {
-    for (let [url, count] of sortReport(pages)) {
-        console.log(`Found ${count} link(s) to ${url}`);
-    }
+    let sortedPages = sortReport(pages);
+    // for (let [url, count] of sortedPages) {
+    //     console.log(`Found ${count} link(s) to ${url}`);
+    // }
+    return sortedPages;
 }
 
 function sortReport(pages) {

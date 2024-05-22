@@ -1,6 +1,7 @@
 import { test, expect} from "@jest/globals";
 import { normalizeURL, getUrlsFromHtml } from "./crawl.js";
 import { sortReport } from "./report.js"
+import { main } from "./main.js";
 
 // normalizeURL tests
 test('test removing protocol', () => {
