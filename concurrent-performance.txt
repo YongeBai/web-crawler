@@ -1,1 +1,1 @@
-Crawling took 1061 ms
+Crawling took 283080 ms

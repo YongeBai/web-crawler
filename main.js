@@ -12,14 +12,18 @@ async function main() {
     }
     let url = process.argv[2];
     console.log(`Crawling ${url}`);
+
+    // seriel crawling
     let pages = await crawlPageSeriel(url);
-    // let pages = await crawlPageConcurrent(url);
     
     let normalizedURL = normalizeURL(url);
     let replacedURL = normalizedURL.replace(/\./g, '_');
     let path = `outputs/${replacedURL}.json`;
     writeOrCompareJson(path, pages);
     
+    // concurrent crawling
+    pages = await crawlPageConcurrent(url);     
+    writeOrCompareJson(path, pages);
 }
 
 function writeOrCompareJson(path, testJSON) {
