@@ -1,5 +1,6 @@
 import { test, expect} from "@jest/globals";
 import { normalizeURL, getUrlsFromHtml } from "./crawl.js";
+import { sortReport } from "./report.js"
 
 // normalizeURL tests
 test('test removing protocol', () => {
@@ -34,4 +35,15 @@ test('get relative and absolute urls', () => {
     )).toEqual(['http://www.example.com/path', 'http://www.google.com']);
 })
 
-
+// test sorting pages
+test('sort pages', () => {
+    expect(sortReport({
+        'http://www.example.com/path': 2,
+        'http://www.example.com/path2': 3,
+        'http://www.example.com': 1,
+    })).toEqual([
+        ['http://www.example.com/path2', 3],
+        ['http://www.example.com/path', 2],
+        ['http://www.example.com', 1],
+    ]);
+})

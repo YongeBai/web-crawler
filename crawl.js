@@ -27,4 +27,43 @@ function getUrlsFromHtml(htmlBody, baseURL) {
     return urls;
 }
 
-export { normalizeURL, getUrlsFromHtml };
+async function crawlPage(baseURL, currentURL = baseURL, pages = {}) {
+    let normalizeCurrentURL = normalizeURL(currentURL);
+    let normalizedBaseURL = normalizeURL(baseURL);
+
+    let currentDomain = normalizeCurrentURL.split('/')[0];
+    let baseDomain = normalizedBaseURL.split('/')[0];
+    
+    if (currentDomain !== baseDomain) {
+        return pages;
+    }
+    if (currentURL in pages) {
+        pages[currentURL] += 1;
+        return pages;
+    }
+    pages[currentURL] = 1;
+
+    try {
+        let response = await fetch(currentURL);
+        if (!response.ok) {
+            throw new Error(`Failed to load page ${currentURL}`);
+        }
+        if (response.headers.get('content-type').split(';')[0] !== 'text/html') {
+            throw new Error(`Page ${currentURL} is not an HTML page`);
+
+        }
+        let html = await response.text();
+        let urls = getUrlsFromHtml(html, baseURL);
+        for (let url of urls) {
+            await crawlPage(baseURL, url, pages);
+        }   
+        return pages;     
+    }
+    catch (error) {
+        console.error(error.message);
+    }
+    
+    
+}
+
+export { normalizeURL, getUrlsFromHtml, crawlPage};
